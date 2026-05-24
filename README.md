@@ -1,77 +1,83 @@
-```text
-====================================================================
-  █████╗ ███╗   ███╗██╗████████╗ ██████╗ ██╗  ██╗██╗  ██╗
- ██╔══██╗████╗ ████║██║╚══██╔══╝██╔═══██╗██║  ██║╚██╗██╔╝
- ███████║██╔████╔██║██║   ██║   ██║   ██║███████║ ╚███╔╝ 
- ██╔══██║██║╚██╔╝██║██║   ██║   ██║   ██║██╔══██║ ██╔██╗ 
- ██║  ██║██║ ╚═╝ ██║██║   ██║   ╚██████╔╝██║  ██║██╔╝ ██╗
- ╚═╝  ╚═╝╚═╝     ╚═╝╚═╝   ╚═╝    ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═╝
-====================================================================
-```
+<div align="center">
 
 # textEncrypt
 
-**textEncrypt** is a lightweight command-line utility for encrypting and decrypting text using reversible ciphers. It features a unique **Shannon Entropy Analyzer** to measure the randomness and cryptographic strength of both plaintext and ciphertext.
+**A command-line text encryption utility with custom cipher, Vigenère cipher, and Shannon entropy analysis — built in Python.**
 
-Designed for security enthusiasts, bug bounty hunters, and developers who want a quick text obfuscation, encryption, and cryptographic complexity analysis utility.
+[![Python 3.x](https://img.shields.io/badge/python-3.x-blue.svg)](https://www.python.org/)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 
----
-
-## 🛡️ Features
-
-- **Bidirectional Custom Cipher:** Uses Amit's classic character mapping (A ➔ 1, J ➔ !, Z ➔ }) with added support for case-preservation and decryption.
-- **Vigenère Cipher Support:** Adds standard Vigenère polyalphabetic cipher for key-based case-preserving encryption and decryption.
-- **Shannon Entropy Analyzer:** 
-  - Measures text complexity and diffusion in bits per character (0.0 to 8.0).
-  - Dynamically calculates the complexity change percentage between plaintext and ciphertext.
-  - Automatically assesses the strength of the cipher (Weak, Moderate, Strong).
-- **argparse CLI Interface:** Clean integration with flags and positional arguments.
-- **Interactive TUI Shell:** Initiates a styled terminal interface when executed without arguments.
+</div>
 
 ---
 
-## ⚙️ Installation
+## Overview
 
-1. **Clone the Repository:**
-   ```bash
-   git clone https://github.com/amit0hx/textEncrypt.git
-   ```
-2. **Navigate to the Directory:**
-   ```bash
-   cd textEncrypt
-   ```
+textEncrypt is a lightweight CLI tool for encrypting, decrypting, and analyzing text using two cipher modes. It includes a built-in Shannon Entropy Analyzer that measures the cryptographic strength and randomness of both plaintext and ciphertext.
+
+Designed for security enthusiasts, CTF players, and developers who need quick text obfuscation with measurable complexity metrics.
 
 ---
 
-## 💻 Usage
+## Supported Ciphers
 
-### 1. CLI Mode (Command Line Arguments)
+| Cipher | Type | Key Required | Case Preserving |
+|--------|------|:------------:|:---------------:|
+| **Custom** | Monoalphabetic substitution (A→1, J→!, Z→}) | No | Yes |
+| **Vigenère** | Polyalphabetic shift cipher | Yes | Yes |
+
+---
+
+## Getting Started
+
+### Prerequisites
+
+- Python 3.6 or later (no external dependencies)
+
+### Installation
+
+```bash
+git clone https://github.com/amit0hx/textEncrypt.git
+cd textEncrypt
+```
+
+---
+
+## Usage
+
+### CLI Mode
 
 #### Custom Cipher (Default)
+
 ```bash
-# Encrypt text using Amit's custom substitution cipher
+# Encrypt
 python text_encrypt.py encrypt "Hello World"
 
-# Decrypt the output back to original text (preserving case)
+# Decrypt
 python text_encrypt.py decrypt "^85##^o ^=^o(#!4"
 ```
 
-#### Vigenère Cipher (Key-based)
+#### Vigenère Cipher
+
 ```bash
-# Encrypt using a custom key
+# Encrypt with key
 python text_encrypt.py encrypt "Attack at Dawn" --mode vigenere --key "mysecretkey"
 
-# Decrypt using the same key
+# Decrypt with same key
 python text_encrypt.py decrypt "Mttsgo sd Hsko" --mode vigenere --key "mysecretkey"
 ```
 
-#### Shannon Entropy Analysis (Add `-a` or `--analyze` flag)
-You can append `-a` to any encrypt/decrypt CLI command to output the Shannon Entropy profile:
+#### Shannon Entropy Analysis
+
+Append `-a` to any encrypt/decrypt command to include entropy metrics:
+
 ```bash
 python text_encrypt.py encrypt "Attack at Dawn" --mode vigenere --key "secret" --analyze
 ```
-*Output:*
-```text
+
+Output:
+
+```
 [>] Shannon Entropy & Cryptographic Analysis:
     - Plaintext Entropy  : 3.239 bits/char
     - Ciphertext Entropy : 3.239 bits/char
@@ -79,26 +85,77 @@ python text_encrypt.py encrypt "Attack at Dawn" --mode vigenere --key "secret" -
     - Security Rating    : MODERATE (Basic Obfuscation)
 ```
 
-#### Standalone Complexity Analysis
-To measure the entropy of any raw string:
+#### Standalone Entropy Analysis
+
+Measure the entropy of any arbitrary string:
+
 ```bash
-python text_encrypt.py analyze "InputYourPlaintextOrCiphertextHere"
+python text_encrypt.py analyze "InputYourTextHere"
 ```
+
+### Interactive Mode
+
+Launch without arguments for the terminal shell interface:
+
+```bash
+python text_encrypt.py
+```
+
+| Option | Action |
+|--------|--------|
+| `1` | Encrypt text (custom or Vigenère) |
+| `2` | Decrypt text (custom or Vigenère) |
+| `3` | Calculate Shannon entropy of a string |
+| `4` | Exit |
 
 ---
 
-## 📂 Project Structure
+## CLI Reference
 
-```text
+| Flag | Description | Default |
+|------|-------------|---------|
+| `action` | `encrypt`, `decrypt`, or `analyze` | — (required) |
+| `text` | Input string to process | — (required) |
+| `-m`, `--mode` | Cipher mode: `custom` or `vigenere` | `custom` |
+| `-k`, `--key` | Encryption key (Vigenère only) | `securekey` |
+| `-a`, `--analyze` | Include Shannon entropy output | `false` |
+
+---
+
+## Entropy Rating Scale
+
+| Entropy (bits/char) | Rating | Meaning |
+|:--------------------:|--------|---------|
+| < 3.0 | **Weak** | Highly predictable, trivial to break |
+| 3.0 – 4.5 | **Moderate** | Basic obfuscation, not cryptographically secure |
+| > 4.5 | **Strong** | High randomness, good diffusion properties |
+
+---
+
+## Project Structure
+
+```
 textEncrypt/
-├── text_encrypt.py       # Main entry point (CLI, Interactive TUI, & Entropy calculations)
-├── LICENSE               # MIT Open Source License
-├── .gitignore            # Python cache and IDE exclusions
-└── README.md             # Project documentation & setup instructions
+├── text_encrypt.py   # CLI parser, cipher engines, entropy calculator, interactive shell
+├── LICENSE           # MIT License
+├── .gitignore        # Python cache exclusions
+└── README.md
 ```
 
 ---
 
-## 📄 License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-====================================================================
+## Disclaimer
+
+These ciphers are **educational implementations** and are not suitable for protecting sensitive data. For production use, use established cryptographic libraries (e.g., `cryptography`, `PyCryptodome`) with proven algorithms (AES, ChaCha20).
+
+---
+
+## License
+
+Distributed under the [MIT License](LICENSE).
+
+---
+
+<div align="center">
+  <sub>Built by <a href="https://github.com/amit0hx">@amit0hx</a></sub>
+</div>
